@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private var backButtonPressedCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +40,12 @@ class LoginActivity : AppCompatActivity() {
             startActivity(signUpIntent)
         }
 
+    }
+
+    override fun onBackPressed() {
+        if (++backButtonPressedCount == 2) {
+            finishAffinity()
+        }
     }
 
     private fun checkLoggedInState(): Boolean {
