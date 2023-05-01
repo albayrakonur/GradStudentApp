@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "926742015823",
+    "project_id": "logindemo-10440",
+    "storage_bucket": "logindemo-10440.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926742015823:android:8686a91f719ae2b69d1f3a",
+        "android_client_info": {
+          "package_name": "com.albayrakonur.gradapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "926742015823-5j0lcbbfkodro0siv3c8toc2lq8mn07s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_oQ7AoA_cFpJWFUnJAg6zEhJxXeA7T6s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "926742015823-5j0lcbbfkodro0siv3c8toc2lq8mn07s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
