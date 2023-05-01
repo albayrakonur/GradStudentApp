@@ -14,6 +14,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class SignUpActivity : AppCompatActivity() {
@@ -79,6 +81,8 @@ class SignUpActivity : AppCompatActivity() {
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 Log.d(TAG, "User profile updated.")
+
+                                val db = Firebase.firestore
 
                                 val signUpIntent = Intent(this@SignUpActivity, LoginActivity::class.java)
                                 startActivity(signUpIntent)

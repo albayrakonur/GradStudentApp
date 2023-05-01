@@ -23,6 +23,7 @@ class LoginActivity : AppCompatActivity() {
 
         if (checkLoggedInState()) {
             val loggedInState = Intent(this@LoginActivity, HomePageActivity::class.java)
+            finish()
             startActivity(loggedInState)
         }
 
@@ -42,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (++backButtonPressedCount == 2) {
             finishAffinity()
