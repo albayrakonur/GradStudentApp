@@ -14,7 +14,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 
 
@@ -22,12 +24,14 @@ class SignUpActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var userPhotoUri: Uri
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
         auth = FirebaseAuth.getInstance()
+        setupDB()
 
         val signUpButton = findViewById<Button>(R.id.signUpButton)
         signUpButton.setOnClickListener {
@@ -49,6 +53,19 @@ class SignUpActivity : AppCompatActivity() {
         pickPhotoButton.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+    }
+
+    private fun setupDB() {
+        // [START get_firestore_instance]
+        db = Firebase.firestore
+        // [END get_firestore_instance]
+
+        // [START set_firestore_settings]
+        val settings = firestoreSettings {
+            isPersistenceEnabled = true
+        }
+        db.firestoreSettings = settings
+        // [END set_firestore_settings]
     }
 
     private fun createAccount() {
@@ -82,14 +99,30 @@ class SignUpActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 Log.d(TAG, "User profile updated.")
 
-                                val db = Firebase.firestore
-
                                 val signUpIntent = Intent(this@SignUpActivity, LoginActivity::class.java)
                                 startActivity(signUpIntent)
 
                             } else {
                                 Log.d(TAG, "Error occurred while updating user profile!")
                             }
+                        }
+
+                    val dbUser = hashMapOf(
+                        "uid" to  user.uid.toString(),
+                        "fullName" to fullName,
+                        "email" to user.email,
+                        "entryYear" to entryYear,
+                        "gradYear" to gradYear,
+                        "photo" to userPhotoUri.toString()
+                    )
+
+                    db.collection("GradAppDB")
+                        .add(dbUser)
+                        .addOnSuccessListener { documentReference ->
+                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Error adding document", e)
                         }
 
                     updateUI(user)
