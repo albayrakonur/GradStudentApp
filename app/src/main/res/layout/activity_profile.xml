@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Onur Albayrak"
+                android:text=""
                 android:textColor="#fff"
                 android:textSize="23dp"
                 android:textStyle="bold" />
@@ -77,9 +77,10 @@
                         android:textSize="17dp" />
 
                     <TextView
+                        android:id="@+id/ProfileActivityEducation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="BSc"
+                        android:text=""
                         android:textColor="#2196F3"
                         android:textSize="17dp"
                         android:textStyle="bold" />
@@ -101,9 +102,10 @@
                         android:textSize="17dp" />
 
                     <TextView
+                        android:id="@+id/ProfileActivityYear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2015-2021"
+                        android:text=""
                         android:textColor="#2196F3"
                         android:textSize="17dp"
                         android:textStyle="bold" />
@@ -125,9 +127,10 @@
                         android:textSize="17dp" />
 
                     <TextView
+                        android:id="@+id/ProfileActivityWorkPlace"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="IBTECH A.S."
+                        android:text=""
                         android:textColor="#2196F3"
                         android:textSize="17dp"
                         android:textStyle="bold" />
@@ -167,11 +170,12 @@
                 android:src="@drawable/ic_baseline_mail_24" />
 
             <TextView
+                android:id="@+id/ProfileActivityEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="15dp"
-                android:text="onur.albayrak@ibtech.com.tr"
+                android:text=""
                 android:textColor="#000"
                 android:textSize="18dp" />
 
@@ -191,35 +195,12 @@
                 android:src="@drawable/ic_baseline_phone_iphone_24" />
 
             <TextView
+                android:id="@+id/ProfileActivityNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="15dp"
-                android:text="+90 555 555 55 55"
-                android:textColor="#000"
-                android:textSize="18dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="5dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/ic_baseline_location_on_24" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="15dp"
-                android:text="Istanbul"
+                android:text=""
                 android:textColor="#000"
                 android:textSize="18dp" />
 
