@@ -24,24 +24,26 @@
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="15dp"
                 android:foregroundGravity="center_horizontal"
-                app:cardCornerRadius="100dp">
+                app:cardCornerRadius="10dp">
 
                 <ImageView
+                    android:id="@+id/ProfileActivityPhoto"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_baseline_person_24" />
+                    android:layout_height="match_parent"/>
             </androidx.cardview.widget.CardView>
 
-            <TextView
+            <EditText
                 android:id="@+id/ProfileActivityFullName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text=""
                 android:textColor="#fff"
+                android:inputType="none"
+                android:enabled="false"
                 android:textSize="23dp"
+                android:layout_marginBottom="20dp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -76,12 +78,13 @@
                         android:textColor="#000"
                         android:textSize="17dp" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/ProfileActivityEducation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
                         android:textColor="#2196F3"
+                        android:inputType="none"
+                        android:enabled="false"
                         android:textSize="17dp"
                         android:textStyle="bold" />
 
@@ -101,11 +104,12 @@
                         android:textColor="#000"
                         android:textSize="17dp" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/ProfileActivityYear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:inputType="none"
+                        android:enabled="false"
                         android:textColor="#2196F3"
                         android:textSize="17dp"
                         android:textStyle="bold" />
@@ -126,11 +130,12 @@
                         android:textColor="#000"
                         android:textSize="17dp" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/ProfileActivityWorkPlace"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:inputType="none"
+                        android:enabled="false"
                         android:textColor="#2196F3"
                         android:textSize="17dp"
                         android:textStyle="bold" />
@@ -169,13 +174,14 @@
                 android:layout_height="45dp"
                 android:src="@drawable/ic_baseline_mail_24" />
 
-            <TextView
+            <EditText
                 android:id="@+id/ProfileActivityEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="15dp"
-                android:text=""
+                android:inputType="none"
+                android:enabled="false"
                 android:textColor="#000"
                 android:textSize="18dp" />
 
@@ -194,18 +200,29 @@
                 android:layout_height="45dp"
                 android:src="@drawable/ic_baseline_phone_iphone_24" />
 
-            <TextView
+            <EditText
                 android:id="@+id/ProfileActivityNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="15dp"
-                android:text=""
+                android:inputType="none"
                 android:textColor="#000"
                 android:textSize="18dp" />
 
         </LinearLayout>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/editProfileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

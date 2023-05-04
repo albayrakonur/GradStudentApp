@@ -1,6 +1,13 @@
 package com.albayrakonur.gradapp
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.Editable
+import android.util.Base64
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.albayrakonur.gradapp.model.UserModel
@@ -10,7 +17,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.tasks.await
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -20,6 +26,9 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var userDetails: UserModel
+    private var buttonClickCount = 0
+    private lateinit var userDocID: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,23 +40,30 @@ class ProfileActivity : AppCompatActivity() {
         val user = auth.currentUser
         val userDB = db.collection("Users")
 
-        val fullNameTextView = findViewById<TextView>(R.id.ProfileActivityFullName)
-        val educationTextView = findViewById<TextView>(R.id.ProfileActivityEducation)
-        val yearTextView = findViewById<TextView>(R.id.ProfileActivityYear)
-        val workPlaceTextView = findViewById<TextView>(R.id.ProfileActivityWorkPlace)
-        val emailTextView = findViewById<TextView>(R.id.ProfileActivityEmail)
-        val numberTextView = findViewById<TextView>(R.id.ProfileActivityNumber)
+        val fullNameTextView = findViewById<EditText>(R.id.ProfileActivityFullName)
+        val educationTextView = findViewById<EditText>(R.id.ProfileActivityEducation)
+        val yearTextView = findViewById<EditText>(R.id.ProfileActivityYear)
+        val workPlaceTextView = findViewById<EditText>(R.id.ProfileActivityWorkPlace)
+        val emailTextView = findViewById<EditText>(R.id.ProfileActivityEmail)
+        val numberTextView = findViewById<EditText>(R.id.ProfileActivityNumber)
+        val photoImageView = findViewById<ImageView>(R.id.ProfileActivityPhoto)
 
         userDB.whereEqualTo("uid", user!!.uid).get().addOnSuccessListener {
             if (!it.isEmpty) {
                 userDetails = convertToUserModel(it)
+                userDocID = it.documents[0].id
 
-                fullNameTextView.text = userDetails.fullName
-                educationTextView.text = userDetails.education
-                yearTextView.text = userDetails.entryYear + "-" + userDetails.gradYear
-                workPlaceTextView.text = userDetails.workPlace
-                emailTextView.text = userDetails.email
-                numberTextView.text = userDetails.number
+                val editableFactory = Editable.Factory.getInstance()
+
+                fullNameTextView.text = editableFactory.newEditable(userDetails.fullName)
+                educationTextView.text = editableFactory.newEditable(userDetails.education)
+                yearTextView.text =
+                    editableFactory.newEditable(userDetails.entryYear + "-" + userDetails.gradYear)
+                workPlaceTextView.text = editableFactory.newEditable(userDetails.workPlace)
+                emailTextView.text = editableFactory.newEditable(userDetails.email)
+                numberTextView.text = editableFactory.newEditable(userDetails.number)
+                photoImageView.setImageBitmap(convertBase64ToImage(userDetails.photo))
+
             }
 
         }.addOnFailureListener {
@@ -55,6 +71,43 @@ class ProfileActivity : AppCompatActivity() {
         }
 
 
+        val editButton = findViewById<Button>(R.id.editProfileButton)
+        editButton.setOnClickListener {
+            if (++buttonClickCount % 2 == 0) {
+                editButton.text = "edit"
+
+                fullNameTextView.isEnabled = false
+                educationTextView.isEnabled = false
+                yearTextView.isEnabled = false
+                workPlaceTextView.isEnabled = false
+                emailTextView.isEnabled = false
+                numberTextView.isEnabled = false
+
+                userDB.document(userDocID).update(
+                    "fullName", fullNameTextView.text.toString(),
+                    "education", educationTextView.text.toString(),
+                    "entryYear", yearTextView.text.trim().substring(0, yearTextView.text.indexOf("-")).toString(),
+                    "gradYear", yearTextView.text.trim().substring(yearTextView.text.indexOf("-") + 1).toString(),
+                    "workPlace", workPlaceTextView.text.toString(),
+                    "email", emailTextView.text.toString(),
+                    "number", numberTextView.text.toString()
+                )
+            } else {
+                editButton.text = "save"
+                fullNameTextView.isEnabled = true
+                educationTextView.isEnabled = true
+                yearTextView.isEnabled = true
+                workPlaceTextView.isEnabled = true
+                emailTextView.isEnabled = true
+                numberTextView.isEnabled = true
+
+            }
+        }
+    }
+
+    private fun convertBase64ToImage(base64String: String): Bitmap {
+        val imageBytes = Base64.decode(base64String, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     }
 
     private fun convertToUserModel(snapshot: QuerySnapshot): UserModel {

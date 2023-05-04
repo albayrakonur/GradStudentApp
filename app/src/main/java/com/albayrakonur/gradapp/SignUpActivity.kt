@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -13,7 +12,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.albayrakonur.gradapp.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
@@ -31,7 +29,6 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var userPhotoUri: Uri
     private lateinit var db: FirebaseFirestore
 
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -44,16 +41,17 @@ class SignUpActivity : AppCompatActivity() {
             createAccount()
         }
 
-        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // Callback is invoked after the user selects a media item or closes the
-            // photo picker.
-            if (uri != null) {
-                userPhotoUri = uri
-                Log.d("PhotoPicker", "Selected URI: $uri")
-            } else {
-                Log.d("PhotoPicker", "No media selected")
+        val pickMedia =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                // Callback is invoked after the user selects a media item or closes the
+                // photo picker.
+                if (uri != null) {
+                    userPhotoUri = uri
+                    Log.d("PhotoPicker", "Selected URI: $uri")
+                } else {
+                    Log.d("PhotoPicker", "No media selected")
+                }
             }
-        }
 
         val pickPhotoButton = findViewById<Button>(R.id.buttonPickPhoto)
         pickPhotoButton.setOnClickListener {
@@ -74,7 +72,6 @@ class SignUpActivity : AppCompatActivity() {
         // [END set_firestore_settings]
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
     private fun createAccount() {
         // [START create_user_with_email]
 
@@ -135,7 +132,15 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun insertUserRecord(model: UserModel) {
         val dbUser = hashMapOf(
-            "uid" to model.uid, "fullName" to model.fullName, "email" to model.email, "entryYear" to model.entryYear, "gradYear" to model.gradYear, "number" to model.number, "photo" to model.photo, "education" to model.education, "workPlace" to model.workPlace
+            "uid" to model.uid,
+            "fullName" to model.fullName,
+            "email" to model.email,
+            "entryYear" to model.entryYear,
+            "gradYear" to model.gradYear,
+            "number" to model.number,
+            "photo" to model.photo,
+            "education" to model.education,
+            "workPlace" to model.workPlace
         )
 
         db.collection("Users").add(dbUser).addOnSuccessListener { documentReference ->
