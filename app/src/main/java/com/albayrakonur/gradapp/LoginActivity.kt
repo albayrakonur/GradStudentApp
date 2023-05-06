@@ -23,8 +23,8 @@ class LoginActivity : AppCompatActivity() {
 
         if (checkLoggedInState()) {
             val loggedInState = Intent(this@LoginActivity, HomePageActivity::class.java)
-            startActivity(loggedInState)
             finish()
+            startActivity(loggedInState)
         }
 
         val loginButton = findViewById<Button>(R.id.loginButton)

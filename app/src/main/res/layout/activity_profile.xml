@@ -39,11 +39,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:textColor="#fff"
-                android:inputType="none"
-                android:enabled="false"
-                android:textSize="23dp"
                 android:layout_marginBottom="20dp"
+                android:enabled="false"
+                android:inputType="none"
+                android:textColor="#fff"
+                android:textSize="23dp"
                 android:textStyle="bold" />
         </LinearLayout>
 

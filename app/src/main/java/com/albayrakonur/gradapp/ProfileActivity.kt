@@ -1,5 +1,6 @@
 package com.albayrakonur.gradapp
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -8,7 +9,6 @@ import android.util.Base64
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.albayrakonur.gradapp.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
@@ -17,9 +17,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.TimeUnit
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -30,6 +27,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var userDocID: String
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
@@ -84,13 +82,20 @@ class ProfileActivity : AppCompatActivity() {
                 numberTextView.isEnabled = false
 
                 userDB.document(userDocID).update(
-                    "fullName", fullNameTextView.text.toString(),
-                    "education", educationTextView.text.toString(),
-                    "entryYear", yearTextView.text.trim().substring(0, yearTextView.text.indexOf("-")).toString(),
-                    "gradYear", yearTextView.text.trim().substring(yearTextView.text.indexOf("-") + 1).toString(),
-                    "workPlace", workPlaceTextView.text.toString(),
-                    "email", emailTextView.text.toString(),
-                    "number", numberTextView.text.toString()
+                    "fullName",
+                    fullNameTextView.text.toString(),
+                    "education",
+                    educationTextView.text.toString(),
+                    "entryYear",
+                    yearTextView.text.trim().substring(0, yearTextView.text.indexOf("-")),
+                    "gradYear",
+                    yearTextView.text.trim().substring(yearTextView.text.indexOf("-") + 1),
+                    "workPlace",
+                    workPlaceTextView.text.toString(),
+                    "email",
+                    emailTextView.text.toString(),
+                    "number",
+                    numberTextView.text.toString()
                 )
             } else {
                 editButton.text = "save"
@@ -102,6 +107,10 @@ class ProfileActivity : AppCompatActivity() {
                 numberTextView.isEnabled = true
 
             }
+        }
+
+        photoImageView.setOnClickListener {
+
         }
     }
 
@@ -123,19 +132,6 @@ class ProfileActivity : AppCompatActivity() {
             userDetails["photo"].toString(),
             userDetails["education"].toString(),
             userDetails["workPlace"].toString()
-        )
-    }
-
-    companion object {
-
-        private val TAG = "DocSnippets"
-
-        private val EXECUTOR = ThreadPoolExecutor(
-            2,
-            4,
-            60,
-            TimeUnit.SECONDS,
-            LinkedBlockingQueue(),
         )
     }
 }

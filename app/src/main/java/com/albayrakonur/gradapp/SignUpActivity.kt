@@ -17,7 +17,6 @@ import com.albayrakonur.gradapp.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -34,7 +33,7 @@ class SignUpActivity : AppCompatActivity() {
         setContentView(R.layout.activity_sign_up)
 
         auth = FirebaseAuth.getInstance()
-        setupDB()
+        db = Firebase.firestore
 
         val signUpButton = findViewById<Button>(R.id.signUpButton)
         signUpButton.setOnClickListener {
@@ -59,19 +58,6 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupDB() {
-        // [START get_firestore_instance]
-        db = Firebase.firestore
-        // [END get_firestore_instance]
-
-        // [START set_firestore_settings]
-        val settings = firestoreSettings {
-            isPersistenceEnabled = true
-        }
-        db.firestoreSettings = settings
-        // [END set_firestore_settings]
-    }
-
     private fun createAccount() {
         // [START create_user_with_email]
 
@@ -92,7 +78,7 @@ class SignUpActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT,
                 ).show()
 
-                var userModel = UserModel(
+                val userModel = UserModel(
                     user!!.uid, fullName, email, entryYear, gradYear, "", "", "", ""
                 )
 
