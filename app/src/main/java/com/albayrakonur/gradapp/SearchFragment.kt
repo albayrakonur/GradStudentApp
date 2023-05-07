@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
+import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import com.albayrakonur.gradapp.model.UserModel
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -30,6 +32,8 @@ class SearchFragment : Fragment() {
 
     private lateinit var db: FirebaseFirestore
     private lateinit var queryResult: ArrayList<UserModel>
+    private lateinit var arrayAdapter: ArrayAdapter<String>
+    private lateinit var userList: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,28 +44,27 @@ class SearchFragment : Fragment() {
 
         db = Firebase.firestore
         queryResult = ArrayList()
+        userList = ArrayList()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        db.collection("Users").get().addOnCompleteListener {
-            queryResult = ArrayList()
-            if (!it.result.isEmpty) {
-                for (i in it.result) {
-                    queryResult.add(convertToUserModel(i))
-                }
-
-            }
-        }
-
-
-
         val searchView = view.findViewById<SearchView>(R.id.searchView)
         val listview = view.findViewById<ListView>(R.id.searchViewResultList)
 
+        // access the listView from xml file
+        arrayAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_1, userList
+        )
+        listview.adapter = arrayAdapter
+
+        arrayAdapter.notifyDataSetChanged()
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
+                getAllUser(query)
                 return false
             }
 
@@ -71,7 +74,27 @@ class SearchFragment : Fragment() {
         })
     }
 
-    private fun convertToUserModel(snapshot: QueryDocumentSnapshot): UserModel {
+    private fun getAllUser(text: String) {
+        db.collection("Users").whereArrayContains("nameArr", text).get()
+            .addOnCompleteListener {
+                if (it.result.documents.isNotEmpty()) {
+                    for (i in it.result.documents) {
+                        queryResult.add(convertToUserModel(i))
+                    }
+                    updateListView(queryResult)
+                }
+            }
+    }
+
+    private fun updateListView(list: ArrayList<UserModel>) {
+        userList.clear()
+        for (i in list) {
+            userList.add(i.fullName)
+        }
+        arrayAdapter.notifyDataSetChanged()
+    }
+
+    private fun convertToUserModel(snapshot: DocumentSnapshot): UserModel {
 
         return UserModel(
             snapshot["uid"].toString(),
