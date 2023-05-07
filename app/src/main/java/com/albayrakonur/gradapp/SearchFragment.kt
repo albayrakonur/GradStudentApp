@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import com.albayrakonur.gradapp.model.UserModel
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -40,40 +39,29 @@ class SearchFragment : Fragment() {
         }
 
         db = Firebase.firestore
-
+        queryResult = ArrayList()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        db.collection("Users").get().addOnCompleteListener {
+            queryResult = ArrayList()
+            if (!it.result.isEmpty) {
+                for (i in it.result) {
+                    queryResult.add(convertToUserModel(i))
+                }
+
+            }
+        }
+
+
+
         val searchView = view.findViewById<SearchView>(R.id.searchView)
         val listview = view.findViewById<ListView>(R.id.searchViewResultList)
 
-        val adapter: ArrayAdapter<String?> = ArrayAdapter<String?>(
-            requireContext(),
-            android.R.layout.simple_list_item_1,
-            queryResult as List<String?>
-        )
-
-        listview.adapter = adapter
-
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-
-                val userDB = db.collection("Users")
-                queryResult = arrayListOf()
-
-                userDB.whereArrayContains("nameArr", query).get().addOnSuccessListener {
-                    if (!it.isEmpty) {
-                        for (i in it.documents) {
-                            queryResult.add(convertToUserModel(i))
-                        }
-                    }
-                }.addOnFailureListener {
-                    println("query error")
-                }
-
-                adapter.notifyDataSetChanged()
                 return false
             }
 
@@ -83,7 +71,7 @@ class SearchFragment : Fragment() {
         })
     }
 
-    private fun convertToUserModel(snapshot: DocumentSnapshot): UserModel {
+    private fun convertToUserModel(snapshot: QueryDocumentSnapshot): UserModel {
 
         return UserModel(
             snapshot["uid"].toString(),
