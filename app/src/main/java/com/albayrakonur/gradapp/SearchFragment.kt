@@ -78,6 +78,7 @@ class SearchFragment : Fragment() {
         db.collection("Users").whereArrayContains("nameArr", text).get()
             .addOnCompleteListener {
                 if (it.result.documents.isNotEmpty()) {
+                    queryResult.clear()
                     for (i in it.result.documents) {
                         queryResult.add(convertToUserModel(i))
                     }
