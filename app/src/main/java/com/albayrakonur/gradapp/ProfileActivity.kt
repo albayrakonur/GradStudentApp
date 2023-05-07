@@ -5,10 +5,14 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Editable
 import android.util.Base64
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.albayrakonur.gradapp.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -16,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import org.w3c.dom.Text
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -43,6 +48,11 @@ class ProfileActivity : AppCompatActivity() {
         val emailTextView = findViewById<EditText>(R.id.ProfileActivityEmail)
         val numberTextView = findViewById<EditText>(R.id.ProfileActivityNumber)
         val photoImageView = findViewById<ImageView>(R.id.ProfileActivityPhoto)
+        val passwordEditText = findViewById<EditText>(R.id.ProfileActivityPassword)
+        val passwordTextView = findViewById<TextView>(R.id.ProfileActivityPw)
+
+        passwordEditText.isVisible = false
+        passwordTextView.isVisible = false
 
         userDB.whereEqualTo("uid", user!!.uid).get().addOnSuccessListener {
             if (!it.isEmpty) {
@@ -79,6 +89,35 @@ class ProfileActivity : AppCompatActivity() {
                 emailTextView.isEnabled = false
                 numberTextView.isEnabled = false
 
+                if (passwordEditText.text.isNotEmpty()) {
+                    user.updatePassword(passwordEditText.text.toString())
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(
+                                    this@ProfileActivity,
+                                    "Password was updated",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    this@ProfileActivity,
+                                    "Update password failed!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }.addOnFailureListener {
+                            Toast.makeText(
+                                this@ProfileActivity,
+                                "Update password failed!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                }
+
+                passwordEditText.isVisible = false
+                passwordEditText.text.clear()
+                passwordTextView.isVisible = false
+
                 userDB.document(userDocID).update(
                     "fullName",
                     fullNameTextView.text.toString(),
@@ -103,6 +142,8 @@ class ProfileActivity : AppCompatActivity() {
                 workPlaceTextView.isEnabled = true
                 emailTextView.isEnabled = true
                 numberTextView.isEnabled = true
+                passwordEditText.isVisible = true
+                passwordTextView.isVisible = true
 
             }
         }
