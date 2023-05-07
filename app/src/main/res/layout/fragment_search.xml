@@ -18,7 +18,7 @@
             android:clickable="true" />
 
         <ListView
-            android:id="@+id/list_view"
+            android:id="@+id/searchViewResultList"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/searchView"

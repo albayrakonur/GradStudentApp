@@ -1,6 +1,5 @@
 package com.albayrakonur.gradapp
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -27,7 +26,6 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var userDocID: String
 
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
@@ -131,7 +129,9 @@ class ProfileActivity : AppCompatActivity() {
             userDetails["number"].toString(),
             userDetails["photo"].toString(),
             userDetails["education"].toString(),
-            userDetails["workPlace"].toString()
+            userDetails["workPlace"].toString(),
+            userDetails["nameArr"] as List<String>,
+            userDetails["isAdmin"] as Boolean
         )
     }
 }

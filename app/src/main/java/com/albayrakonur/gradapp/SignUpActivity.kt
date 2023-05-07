@@ -79,7 +79,17 @@ class SignUpActivity : AppCompatActivity() {
                 ).show()
 
                 val userModel = UserModel(
-                    user!!.uid, fullName, email, entryYear, gradYear, "", "", "", ""
+                    user!!.uid,
+                    fullName,
+                    email,
+                    entryYear,
+                    gradYear,
+                    "",
+                    "",
+                    "",
+                    "",
+                    arrayListOf(),
+                    false
                 )
 
                 try {
@@ -108,7 +118,7 @@ class SignUpActivity : AppCompatActivity() {
                 Log.w(TAG, "createUserWithEmail:failure", task.exception)
                 Toast.makeText(
                     baseContext,
-                    "Authentication failed.",
+                    task.exception.toString(),
                     Toast.LENGTH_SHORT,
                 ).show()
             }
@@ -117,6 +127,17 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun insertUserRecord(model: UserModel) {
+
+        val nameArr = Array(model.fullName.length) { "" }
+        nameArr[0] = model.fullName[0].toString()
+
+        for (i in 1 until model.fullName.length) {
+            println(model.fullName[i])
+            nameArr[i] = nameArr[i - 1] + model.fullName[i].toString()
+        }
+
+        println("nameArr: $nameArr")
+
         val dbUser = hashMapOf(
             "uid" to model.uid,
             "fullName" to model.fullName,
@@ -126,7 +147,9 @@ class SignUpActivity : AppCompatActivity() {
             "number" to model.number,
             "photo" to model.photo,
             "education" to model.education,
-            "workPlace" to model.workPlace
+            "workPlace" to model.workPlace,
+            "nameArr" to nameArr.toList(),
+            "isAdmin" to false
         )
 
         db.collection("Users").add(dbUser).addOnSuccessListener { documentReference ->

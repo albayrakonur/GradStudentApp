@@ -9,5 +9,7 @@ data class UserModel(
     var number: String,
     var photo: String,
     var education: String,
-    var workPlace: String
+    var workPlace: String,
+    var nameArr: List<String>,
+    var isAdmin: Boolean
 ) {}
