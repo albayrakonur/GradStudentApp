@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.SearchView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.albayrakonur.gradapp.model.UserModel
 import com.google.firebase.firestore.DocumentSnapshot
@@ -34,6 +31,8 @@ class SearchFragment : Fragment() {
     private lateinit var queryResult: ArrayList<UserModel>
     private lateinit var arrayAdapter: ArrayAdapter<String>
     private lateinit var userList: ArrayList<String>
+    private lateinit var userMapping: HashMap<String, String>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +44,7 @@ class SearchFragment : Fragment() {
         db = Firebase.firestore
         queryResult = ArrayList()
         userList = ArrayList()
+        userMapping = HashMap()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,6 +69,7 @@ class SearchFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
+                getAllUser(newText)
                 return false
             }
         })
